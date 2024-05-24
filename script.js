@@ -1,66 +1,54 @@
-import { queriedData , AddToDB} from "./firebase.js";
+import { AddToDB} from "./firebase.js";
 
 import { firestore } from "./firebase.js";
-import { doc, onSnapshot, collection, query,where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+import { onSnapshot, collection, query,where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
 
-// const unsub = onSnapshot(doc(firestore, "chat", "SF"), (doc) => {
-//     console.log("Current data: ", doc.data());
-// });
+const sendNotif = (msg)=>{
+    const notification = Notification.requestPermission().then((perm)=>{
+        console.log(new Date().getTime() -  msg.time );
+        if((new Date().getTime() -  msg.time) < 10000 && username != msg.name)
+        {
+            new Notification(`New message from ${msg.name}`,{
+                body: msg.message,
+                // tag : "message",
+                // silent : false
+            });
+        }
 
-const table = document.getElementById('history').querySelector('table');
-
-const msgQuery = query(collection(firestore,'chat'),where("time", '>', new Date().setHours(0,0,0,0)),orderBy('time','desc'),limit(100));
-// const msgQuery = query(collection(firestore,'chat'),orderBy('time','desc'),limit(2));
-onSnapshot(msgQuery, (snapshot)=> {
-    snapshot.docChanges().reverse().forEach((change)=>{
-            // Handle added document
-            if (change.type === "added") {
-                const msg = change.doc.data();
-                // Process the added document as needed
-                const msgTime = new Date(msg.time);
-                const row = document.createElement('tr');
-                const name = document.createElement('td');
-                name.innerText = `${msg.name} : ${msg.message}`;
-
-                const time = document.createElement('td');
-                time.innerText = msgTime.toLocaleTimeString();
-                row.append(name,time);
-
-                table.appendChild(row);
-                console.log( new Date(msgTime).getTime());
-
-                const history = document.getElementById('history');
-                history.scrollTop = history.scrollHeight;
-            }
-        
-    });
-});
-
+    })
+}
 
 const populateHistory = async ()=>{
 
-    const query = await queriedData('data',"chat",'','','','time','desc',20);
     const table = document.getElementById('history').querySelector('table');
 
+    const msgQuery = query(collection(firestore,'chat'),where("time", '>', new Date().setHours(0,0,0,0)),orderBy('time','desc'),limit(100));
+    // const msgQuery = query(collection(firestore,'chat'),orderBy('time','desc'),limit(2));
+    onSnapshot(msgQuery, (snapshot)=> {
+        snapshot.docChanges().reverse().forEach((change)=>{
+                // Handle added document
+                if (change.type === "added") {
+                    const msg = change.doc.data();
+                    sendNotif(msg);
+                    // Process the added document as needed
+                    const msgTime = new Date(msg.time);
+                    const row = document.createElement('tr');
+                    const name = document.createElement('td');
+                    name.innerText = `${msg.name} : ${msg.message}`;
 
+                    const time = document.createElement('td');
+                    time.innerText = msgTime.toLocaleTimeString('en-IN',{ hour: '2-digit', minute: '2-digit', hour12: false });
+                    row.append(name,time);
 
-    // for (let i = Object.values(data).length -1; i >= 0 ; i--) {
-    //     const msg = Object.values(data)[i];
-        
-    //     const msgTime = new Date(msg.time.seconds*1000);
-    //     const row = document.createElement('tr');
-    //     const name = document.createElement('td');
-    //     name.innerText = `${msg.name} : ${msg.message}`;
-    //     // const message = document.createElement('td');
-    //     // message.innerText = msg.message;
-    //     const time = document.createElement('td');
-    //     time.innerText = msgTime.toLocaleTimeString();
-    //     row.append(name,time);
+                    table.appendChild(row);
+                    // console.log( new Date(msgTime).getTime());
 
-    //     table.appendChild(row);
-    //     // console.log(msg.name, msg.message);
-    //     // console.log(msgTime);
-    // };
+                    const history = document.getElementById('history');
+                    history.scrollTop = history.scrollHeight;
+                }
+            
+        });
+    });
 }
 
 
@@ -107,7 +95,8 @@ userForm.addEventListener('submit', (event)=>{
     event.preventDefault();
     username = userForm.querySelector('input').value;
     localStorage.setItem('username', username);
-    document.getElementById('user_container').style.display = "none";
+    // document.getElementById('user_container').style.display = "none";
+    location.reload();
 
 })
 

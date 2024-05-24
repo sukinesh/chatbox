@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Box</title>
+    <link rel="shortcut icon" href="assets/chat.svg" type="image/x-icon">
+
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="script.js"></script>
+</head>
+<body>
+    <div id="header">
+        <span id="user_id">
+        </span>
+        <img src="assets/user.svg" alt="">
+    </div>
+    <div id="chatbox">
+        <div id="history">
+            <table></table>
+        </div>
+        <div id="input">
+            <form>
+                <input type="text" name="message" id="msg_field" autofocus autocomplete="off">
+                <button type="submit">
+                    <img src="assets/send.svg" alt="">
+                </button>
+            </form>
+    
+        </input>
+        </div>
+    </div>
+    <div id="user_container">
+        <form id="user_form" >
+            <h1> Select a user name..</h1>
+            <input type="text">
+            <button>Confirm</button> 
+        </form>
+    </div>
+</body>
+</html>

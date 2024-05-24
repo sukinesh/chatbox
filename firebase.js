@@ -1,5 +1,3 @@
-// import { Loading, Progress , Toast} from "./tools.js";
-// import { user_email, current_branch } from "../module.js";
 //---------------IMPORTING FIREBASE & FIRESTORE-----------------------------
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
 // Config of firebase from old account
@@ -10,12 +8,6 @@ const firebaseConfig = {
     storageBucket: "apis-and-miscs.appspot.com",
     messagingSenderId: "471743871347",
     appId: "1:471743871347:web:d85fbd1ecac94496d76d06"
-    // apiKey: "AIzaSyCgtW4BEzTT_NjRYhZq10kQOqPsHXO0wOs",
-    // authDomain: "smass-gym-software.firebaseapp.com",
-    // projectId: "smass-gym-software",                           //<--------------new Config
-    // storageBucket: "smass-gym-software.appspot.com",
-    // messagingSenderId: "528161454619",
-    // appId: "1:528161454619:web:7766feb8020400236516be"
 };
 // Initialize Firebase
 const firebase = initializeApp(firebaseConfig);
